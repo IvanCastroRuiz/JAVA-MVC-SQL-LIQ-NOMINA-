@@ -1,6 +1,8 @@
 package clases;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class CallCenter {
     // Atributos
@@ -137,5 +139,33 @@ public class CallCenter {
         
         return prestacion;
     }
+    
+    public ArrayList<HashMap> procesoMasivoNomina(LinkedList<Empleado> empleados){
+        ArrayList<HashMap> liqNominasPrestaciones = new ArrayList<>();
+   
+        if(empleados != null){
+            for (Empleado empleado : empleados) {
+                HashMap<String, ArrayList> liqEmpleado = new HashMap<String, ArrayList>();
+
+                ArrayList<Double> nomina = new ArrayList<>();
+                ArrayList<Double> prestacion = new ArrayList<>();
+                ArrayList<Double> id = new ArrayList<>();
+                
+                id.add(Double.valueOf(empleado.getId()));
+                nomina = liquidarNominaEmp(empleado);
+                prestacion = liquidarPrestacionesEmp(empleado);
+
+                liqEmpleado.put("Id", id);
+                liqEmpleado.put("Nomina", nomina);
+                liqEmpleado.put("Prestacion", prestacion);
+
+                liqNominasPrestaciones.add(liqEmpleado);            
+            }
+        }else{
+            return null;
+        }        
+        return liqNominasPrestaciones;
+    };
+    
     
 }

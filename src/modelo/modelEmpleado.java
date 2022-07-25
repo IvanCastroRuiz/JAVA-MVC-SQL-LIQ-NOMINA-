@@ -3,6 +3,7 @@ import java.sql.*;
 
 import clases.Empleado;
 import java.awt.Component;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 public class modelEmpleado extends DbData {
@@ -44,6 +45,10 @@ public class modelEmpleado extends DbData {
                     default -> throw new AssertionError();
                 }
             }
+            
+            stmt.executeUpdate();
+            stmt.close();
+            
             return emp;
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());  
@@ -110,5 +115,57 @@ public class modelEmpleado extends DbData {
         }
         
         return null;
+    }
+    
+    public void eliminarEmpleado(String id){
+        
+        try (Connection connection = DriverManager.getConnection(getUrl(), getUser(), getPassword())) {
+            
+            String query = "DELETE FROM `tb_empleado` WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, id);
+            stmt.executeUpdate();
+            stmt.close();
+            
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());  
+        }
+    }
+    
+    public LinkedList<Empleado> ListaEmpleado(){
+        LinkedList<Empleado> empleadoLista = new LinkedList<>();
+        Empleado empleado = null;
+        
+        try (Connection connection = DriverManager.getConnection(getUrl(), getUser(), getPassword())) {
+            
+            String query = "SELECT `id`, `nombre`, `apellido`, `horas_extra`, `aux_transp`, `salario` FROM `tb_empleado`";
+            Statement stmt = connection.createStatement();
+            ResultSet resul = stmt.executeQuery(query);
+            while(resul.next()){
+                int id = resul.getInt(1);
+                String nombre = resul.getString(2);
+                String apellido = resul.getString(3);
+                int vlrHoraExtra = resul.getInt(4);
+                String auxTransp = resul.getString(5);
+                int salarioEmpl = resul.getInt(6);
+                
+                switch (auxTransp) {
+                    case "true" -> empleado = new Empleado(nombre, apellido ,vlrHoraExtra, true, salarioEmpl);
+                    case "false" -> empleado = new Empleado(nombre, apellido ,vlrHoraExtra, false, salarioEmpl);
+                    default -> throw new AssertionError();
+                }
+                //mostrarDatos(id, nombre, apellido, vlrHoraExtra, auxTransp, salarioEmpl);
+                empleadoLista.add(empleado);
+            }            
+            
+            stmt.close();
+            resul.close();
+            
+            return empleadoLista;
+            
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return empleadoLista;
     }
 }
