@@ -40,8 +40,8 @@ public class modelEmpleado extends DbData {
                 mostrarDatos(empId,nombre,apellido,vlrHoraExtra,auxTransp,salarioEmpl);
                 
                 switch (auxTransp) {
-                    case "true" -> emp = new Empleado(nombre, apellido ,vlrHoraExtra, true, salarioEmpl);
-                    case "false" -> emp = new Empleado(nombre, apellido ,vlrHoraExtra, false, salarioEmpl);
+                    case "true" -> emp = new Empleado(empId,nombre, apellido ,vlrHoraExtra, true, salarioEmpl);
+                    case "false" -> emp = new Empleado(empId,nombre, apellido ,vlrHoraExtra, false, salarioEmpl);
                     default -> throw new AssertionError();
                 }
             }
@@ -150,8 +150,8 @@ public class modelEmpleado extends DbData {
                 int salarioEmpl = resul.getInt(6);
                 
                 switch (auxTransp) {
-                    case "true" -> empleado = new Empleado(nombre, apellido ,vlrHoraExtra, true, salarioEmpl);
-                    case "false" -> empleado = new Empleado(nombre, apellido ,vlrHoraExtra, false, salarioEmpl);
+                    case "true" -> empleado = new Empleado(id,nombre, apellido ,vlrHoraExtra, true, salarioEmpl);
+                    case "false" -> empleado = new Empleado(id,nombre, apellido ,vlrHoraExtra, false, salarioEmpl);
                     default -> throw new AssertionError();
                 }
                 //mostrarDatos(id, nombre, apellido, vlrHoraExtra, auxTransp, salarioEmpl);

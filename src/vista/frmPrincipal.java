@@ -6,8 +6,10 @@ package vista;
 
 import clases.CallCenter;
 import clases.Empleado;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -105,7 +107,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListNominasMasivas = new javax.swing.JList<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListEmpleado = new javax.swing.JList<>();
@@ -796,7 +798,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(jListNominasMasivas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -1112,41 +1114,27 @@ public class frmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         LinkedList<Empleado> empleados = modelEmpl.ListaEmpleado();
-        ArrayList<HashMap> procesos = new ArrayList<>();
-        
-        for (Empleado empleado : empleados) {
-            System.out.println("Nombre: " + empleado.getNombre());
-        }
-        
+        ArrayList<ArrayList> procesos = new ArrayList<>();
+       
         procesos = callCenter.procesoMasivoNomina(empleados);
         
         listaNominasPrestaciones(procesos);       
         
-        
-        
-        
     }//GEN-LAST:event_jButtonProcesarActionPerformed
     
     private void listaNominasPrestaciones(ArrayList procesos){
-     
-     
-        for (Object object : procesos) {
-            System.out.println(procesos);
-        }
-        
-        /*DefaultListModel model = new DefaultListModel();
+
+        DefaultListModel model = new DefaultListModel();
         int index = 0;
-        for (Empleado empleado : empObjectList) {
-            String data =  (index+1) + " ) " +  empleado.getNombre() + " - " + empleado.getApellidos() + 
-                                       "\n Horas Extras: " + empleado.getHorasExtra() + 
-                                       "\n Valor Salario: " + empleado.getSalario() + 
-                                       "\n Auxilio Transporte \n" + empleado.isAuxilioTransporte();
-            System.out.println();
-            model.add(index, data);
-            index++;
-        }
-        jListEmpleado.setModel(model);*/
+     
+        model.add(index, "      ID - NOMBRE - NOMINA - PRESTACIONES");
         
+        for (int i = 0; i < procesos.size(); i++) {
+            index++;            
+            String data = "ID: " + procesos.get(i);
+            model.add(index, data);
+        }
+        jListNominasMasivas.setModel(model);        
     }
     
     
@@ -1240,8 +1228,8 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTotalNomina;
     private javax.swing.JLabel jLabelTotalPrestaciones;
     private javax.swing.JLabel jLabelValorHorasExtras;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jListEmpleado;
+    private javax.swing.JList<String> jListNominasMasivas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

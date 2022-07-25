@@ -18,13 +18,13 @@ public class RetoCallCenter {
         Empleado empleado0 = new Empleado();
         listEmpleado.add(empleado0);
         
-        Empleado empleado1 = new Empleado("Carmen", "Perez", 40000, true, 1500000);
+        Empleado empleado1 = new Empleado(1,"Carmen", "Perez", 40000, true, 1500000);
         listEmpleado.add(empleado1);
         
-        Empleado empleado2 = new Empleado("Pablo", "Castro", 25000, true, 1200000);
+        Empleado empleado2 = new Empleado(2,"Pablo", "Castro", 25000, true, 1200000);
         listEmpleado.add(empleado2);
         
-        Empleado empleado3 = new Empleado("Laura", "Ortiz",50000, false, 2000000);
+        Empleado empleado3 = new Empleado(3,"Laura", "Ortiz",50000, false, 2000000);
         listEmpleado.add(empleado3);
         
         modelEmpleado empleado4 = new modelEmpleado();

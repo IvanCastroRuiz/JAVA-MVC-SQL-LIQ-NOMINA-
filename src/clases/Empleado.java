@@ -11,7 +11,7 @@ public class Empleado {
     
     // Constructor
 
-    public Empleado(String nombre, String apellidos, int horasExtra, boolean auxilioTransporte, int salario) {
+    public Empleado(int id, String nombre, String apellidos, int horasExtra, boolean auxilioTransporte, int salario) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;

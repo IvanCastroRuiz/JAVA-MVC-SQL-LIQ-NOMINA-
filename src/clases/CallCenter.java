@@ -3,6 +3,11 @@ package clases;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class CallCenter {
     // Atributos
@@ -140,26 +145,29 @@ public class CallCenter {
         return prestacion;
     }
     
-    public ArrayList<HashMap> procesoMasivoNomina(LinkedList<Empleado> empleados){
-        ArrayList<HashMap> liqNominasPrestaciones = new ArrayList<>();
+    public ArrayList<ArrayList> procesoMasivoNomina(LinkedList<Empleado> empleados){
+        ArrayList<ArrayList> liqNominasPrestaciones = new ArrayList<>();
    
         if(empleados != null){
             for (Empleado empleado : empleados) {
-                HashMap<String, ArrayList> liqEmpleado = new HashMap<String, ArrayList>();
+                //HashMap<String, ArrayList> liqEmpleado = new HashMap<String, ArrayList>();
+                
+                ArrayList liqEmpleado = new ArrayList<>();
 
                 ArrayList<Double> nomina = new ArrayList<>();
                 ArrayList<Double> prestacion = new ArrayList<>();
-                ArrayList<Double> id = new ArrayList<>();
-                
-                id.add(Double.valueOf(empleado.getId()));
+                   
+                int id =  empleado.getId();
+                String nombreCompleto = empleado.getNombre() + " " + empleado.getApellidos();
                 nomina = liquidarNominaEmp(empleado);
                 prestacion = liquidarPrestacionesEmp(empleado);
+                
+                liqEmpleado.add(id);
+                liqEmpleado.add(nombreCompleto);
+                liqEmpleado.add(Math.round(nomina.get(0)));
+                liqEmpleado.add(Math.round(prestacion.get(0)));
 
-                liqEmpleado.put("Id", id);
-                liqEmpleado.put("Nomina", nomina);
-                liqEmpleado.put("Prestacion", prestacion);
-
-                liqNominasPrestaciones.add(liqEmpleado);            
+                liqNominasPrestaciones.add(liqEmpleado);          
             }
         }else{
             return null;
