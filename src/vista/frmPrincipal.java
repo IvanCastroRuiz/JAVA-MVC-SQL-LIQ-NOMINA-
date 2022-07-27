@@ -21,6 +21,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     LinkedList<Empleado> empObjectList = new LinkedList<>();
     modelEmpleado modelEmpl = new modelEmpleado();
     CallCenter callCenter = new CallCenter();
+    Empleado empleado;
     
 
     public frmPrincipal() {
@@ -395,8 +396,15 @@ public class frmPrincipal extends javax.swing.JFrame {
         jLabelCvalorHE.setText("Vlr Horas Extras:");
 
         jTextFieldCSalario.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextFieldCSalario.setText("0");
+        jTextFieldCSalario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCSalarioActionPerformed(evt);
+            }
+        });
 
         jTextFieldCvlrHE.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextFieldCvlrHE.setText("0");
 
         jCheckBoxCAT.setText("Auxilio Transporte");
         jCheckBoxCAT.addActionListener(new java.awt.event.ActionListener() {
@@ -409,10 +417,6 @@ public class frmPrincipal extends javax.swing.JFrame {
         jPanelCrearEmpleado.setLayout(jPanelCrearEmpleadoLayout);
         jPanelCrearEmpleadoLayout.setHorizontalGroup(
             jPanelCrearEmpleadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelCrearEmpleadoLayout.createSequentialGroup()
-                .addGap(161, 161, 161)
-                .addComponent(jButtonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
             .addGroup(jPanelCrearEmpleadoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanelCrearEmpleadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -428,7 +432,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanelCrearEmpleadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelCrearEmpleadoLayout.createSequentialGroup()
                         .addComponent(jCheckBoxCAT)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 174, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCrearEmpleadoLayout.createSequentialGroup()
                         .addGroup(jPanelCrearEmpleadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -438,6 +442,10 @@ public class frmPrincipal extends javax.swing.JFrame {
                             .addComponent(jTextFieldCvlrHE, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                             .addComponent(jTextFieldCSalario))))
                 .addContainerGap())
+            .addGroup(jPanelCrearEmpleadoLayout.createSequentialGroup()
+                .addGap(190, 190, 190)
+                .addComponent(jButtonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelCrearEmpleadoLayout.setVerticalGroup(
             jPanelCrearEmpleadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -458,9 +466,9 @@ public class frmPrincipal extends javax.swing.JFrame {
                         .addComponent(jTextFieldCvlrHE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxCAT)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonGuardar)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -967,23 +975,29 @@ public class frmPrincipal extends javax.swing.JFrame {
         
         try {
             
-            modelEmpleado modelGuardar = new modelEmpleado();
-            
-            String auxTransString;
-            boolean auxTransBo = jCheckBoxCAT.isSelected();
-            
-            if(auxTransBo){
-                auxTransString = "true";
+            if(jTextFieldCNombres.getText().equals("") || jTextFieldCApellidos.getText().equals("") || (Integer.valueOf(jTextFieldCSalario.getText()) <= 0) || (Integer.valueOf(jTextFieldCvlrHE.getText()) < 0) ){
+                JOptionPane.showMessageDialog(rootPane, "Valor del nombre, apellido y salario, son obligatorios");
             }else{
-                auxTransString = "false";
-            }
+                String auxTransString;
+                boolean auxTransBo = jCheckBoxCAT.isSelected();
 
-            modelGuardar.crearEmpleado(jTextFieldCNombres.getText(), jTextFieldCApellidos.getText(), Integer.valueOf(jTextFieldCvlrHE.getText()), auxTransString, Integer.valueOf(jTextFieldCSalario.getText()));
-            
-            JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
-            
+                if(auxTransBo){
+                    auxTransString = "true";
+                }else{
+                    auxTransString = "false";
+                }
+
+                modelEmpl.crearEmpleado(jTextFieldCNombres.getText(), jTextFieldCApellidos.getText(), Integer.valueOf(jTextFieldCvlrHE.getText()), auxTransString, Integer.valueOf(jTextFieldCSalario.getText()));
+
+                JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
+                jTextFieldCNombres.setText("");
+                jTextFieldCApellidos.setText("");
+                jTextFieldCSalario.setText("0");
+                jTextFieldCvlrHE.setText("0");
+                jCheckBoxCAT.setSelected(false);
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Error: Salario y Hora Extra deben ser de tipo numerico \n"+ e.getMessage());
         }
                 
     }//GEN-LAST:event_jButtonGuardarActionPerformed
@@ -999,37 +1013,41 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void jButtonEGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEGuardarActionPerformed
         // TODO add your handling code here:
         try {
-            modelEmpleado modelGuardar = new modelEmpleado();
-            String auxTransString;
-            boolean auxTransBo = jCheckBoxEAuxTransp.isSelected();
             
-            if(auxTransBo){
-                auxTransString = "true";
+            if(jTextFieldENombres.getText().equals("") || jTextFieldEApellidos.getText().equals("") || (Integer.valueOf(jTextFieldESalarios.getText()) <= 0) || (Integer.valueOf(jTextFieldEvlrHE.getText()) < 0) ){
+                JOptionPane.showMessageDialog(rootPane, "Valor del nombre, apellido y salario, son obligatorios");
             }else{
-                auxTransString = "false";
-            }
+               String auxTransString;
+                boolean auxTransBo = jCheckBoxEAuxTransp.isSelected();
 
-            Empleado empl = modelGuardar.actualizarEmpleado(jTextFieldENombres.getText(),jTextFieldEApellidos.getText(),Integer.valueOf(jTextFieldEvlrHE.getText()),auxTransString,Integer.valueOf(jTextFieldESalarios.getText()),jTextFieldECodigo.getText());
-            
-            if(empl==null){
-                JOptionPane.showMessageDialog(rootPane, "Empleado No Guardado");
-                jTextFieldECodigo.setText("");
-                jTextFieldENombres.setText("");
-                jTextFieldEvlrHE.setText("");
-                jTextFieldEApellidos.setText("");
-                jTextFieldESalarios.setText("");
-                jCheckBoxEAuxTransp.setSelected(false);
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
-                jTextFieldECodigo.setText("");
-                jTextFieldENombres.setText("");
-                jTextFieldEvlrHE.setText("");
-                jTextFieldEApellidos.setText("");
-                jTextFieldESalarios.setText("");
-                jCheckBoxEAuxTransp.setSelected(false);
+                if(auxTransBo){
+                    auxTransString = "true";
+                }else{
+                    auxTransString = "false";
+                }
+
+                empleado = modelEmpl.actualizarEmpleado(jTextFieldENombres.getText(),jTextFieldEApellidos.getText(),Integer.valueOf(jTextFieldEvlrHE.getText()),auxTransString,Integer.valueOf(jTextFieldESalarios.getText()),jTextFieldECodigo.getText());
+
+                if(empleado==null){
+                    JOptionPane.showMessageDialog(rootPane, "Empleado No Guardado");
+                    jTextFieldECodigo.setText("");
+                    jTextFieldENombres.setText("");
+                    jTextFieldEvlrHE.setText("");
+                    jTextFieldEApellidos.setText("");
+                    jTextFieldESalarios.setText("");
+                    jCheckBoxEAuxTransp.setSelected(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
+                    jTextFieldECodigo.setText("");
+                    jTextFieldENombres.setText("");
+                    jTextFieldEvlrHE.setText("");
+                    jTextFieldEApellidos.setText("");
+                    jTextFieldESalarios.setText("");
+                    jCheckBoxEAuxTransp.setSelected(false); 
+                }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Error: Salario y Hora Extra deben ser de tipo numerico \n"+ e.getMessage());
             jTextFieldECodigo.setText("");
             jTextFieldENombres.setText("");
             jTextFieldEvlrHE.setText("");
@@ -1044,10 +1062,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
 
-            modelEmpleado modelConsultar = new modelEmpleado();
-            Empleado empl = modelConsultar.consultaEmpleadoId(jTextFieldECodigo.getText());
+            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo.getText());
 
-            if(empl==null){
+            if(empleado==null){
                 JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
                 jTextFieldECodigo.setText("");
                 jTextFieldENombres.setText("");
@@ -1057,11 +1074,11 @@ public class frmPrincipal extends javax.swing.JFrame {
                 jCheckBoxEAuxTransp.setSelected(false);
             }else{
 
-                jTextFieldENombres.setText(empl.getNombre());
-                jTextFieldEApellidos.setText(empl.getApellidos());
-                jTextFieldESalarios.setText(String.valueOf(empl.getSalario()));
-                jTextFieldEvlrHE.setText(String.valueOf(empl.getHorasExtra()));
-                jCheckBoxEAuxTransp.setSelected(empl.isAuxilioTransporte());
+                jTextFieldENombres.setText(empleado.getNombre());
+                jTextFieldEApellidos.setText(empleado.getApellidos());
+                jTextFieldESalarios.setText(String.valueOf(empleado.getSalario()));
+                jTextFieldEvlrHE.setText(String.valueOf(empleado.getHorasExtra()));
+                jCheckBoxEAuxTransp.setSelected(empleado.isAuxilioTransporte());
             }
 
         } catch (Exception e) {
@@ -1072,28 +1089,26 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void jButtonEConsultar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEConsultar1ActionPerformed
         // TODO add your handling code here:
         
-        modelEmpleado modelConsultar = new modelEmpleado();
-        
         try {
 
-            Empleado empl = modelConsultar.consultaEmpleadoId(jTextFieldECodigo1.getText());
+            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo1.getText());
 
-            if(empl==null){
+            if(empleado==null){
                 
                 JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
 
             }else{
 
                 
-                int conf = JOptionPane.showConfirmDialog(rootPane, "Realmente quiere eliminar este empleado? \n" + empl.getNombre() + " " + empl.getApellidos());
+                int conf = JOptionPane.showConfirmDialog(rootPane, "Realmente quiere eliminar este empleado? \n" + empleado.getNombre() + " " + empleado.getApellidos());
                 
                 if(conf == JOptionPane.YES_OPTION){
-                    modelConsultar.eliminarEmpleado(jTextFieldECodigo1.getText());
-                    JOptionPane.showMessageDialog(rootPane, "Empleado eliminado exitosamente: \n"+ empl.getNombre() + " " + empl.getApellidos());
+                    modelEmpl.eliminarEmpleado(jTextFieldECodigo1.getText());
+                    JOptionPane.showMessageDialog(rootPane, "Empleado eliminado exitosamente: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
                     jTextFieldECodigo1.setText("");
                 }else{
                     if(conf == JOptionPane.NO_OPTION){
-                        JOptionPane.showMessageDialog(rootPane, "Empleado no eliminado: \n"+ empl.getNombre() + " " + empl.getApellidos());
+                        JOptionPane.showMessageDialog(rootPane, "Empleado no eliminado: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
                         jTextFieldECodigo1.setText("");
                     }
                 }
@@ -1121,6 +1136,10 @@ public class frmPrincipal extends javax.swing.JFrame {
         listaNominasPrestaciones(procesos);       
         
     }//GEN-LAST:event_jButtonProcesarActionPerformed
+
+    private void jTextFieldCSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCSalarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldCSalarioActionPerformed
     
     private void listaNominasPrestaciones(ArrayList procesos){
 
