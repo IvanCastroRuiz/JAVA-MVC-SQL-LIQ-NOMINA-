@@ -141,8 +141,7 @@ public class CallCenter {
     }
        
     public HashMap<Integer, ArrayList> procesoMasivoNomina(LinkedList<Empleado> empleados){
-        ArrayList<ArrayList> liqNominasPrestaciones = new ArrayList<>();
-        
+       
         HashMap<Integer, ArrayList> listaNomina = new HashMap<Integer, ArrayList>();
           
         if(empleados != null){
@@ -156,6 +155,7 @@ public class CallCenter {
                    
                 int id =  empleado.getId();
                 String nombreCompleto = empleado.getNombre() + " " + empleado.getApellidos();
+
                 nomina = liquidarNominaEmp(empleado);
                 prestacion = liquidarPrestacionesEmp(empleado);
                 
@@ -165,7 +165,6 @@ public class CallCenter {
                 liqEmpleado.add(Math.round(prestacion.get(0)));
                     
                 listaNomina.put(id, liqEmpleado); 
-                liqNominasPrestaciones.add(liqEmpleado);          
             }
         }else{
             return null;
