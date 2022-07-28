@@ -4,14 +4,11 @@
  */
 package vista;
 
-import clases.CallCenter;
-import clases.Empleado;
-import com.google.gson.JsonObject;
+import controlador.CallCenter;
+import controlador.Empleado;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import modelo.modelEmpleado;
@@ -906,30 +903,199 @@ public class frmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarActionPerformed
+        // TODO add your handling code here:
+
+        LinkedList<Empleado> empleados = modelEmpl.ListaEmpleado();
+        HashMap<Integer, ArrayList> listaNomina = new HashMap<Integer, ArrayList>();
+
+        listaNomina = callCenter.procesoMasivoNomina(empleados);
+
+        if(listaNomina != null){
+            //listaNominasPrestaciones(procesos);
+            listaNominasPrestaciones(listaNomina);
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Error en el proceso intente nuevamente");
+        }
+    }//GEN-LAST:event_jButtonProcesarActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButtonEConsultar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEConsultar1ActionPerformed
+        // TODO add your handling code here:
+
+        try {
+
+            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo1.getText());
+
+            if(empleado==null){
+
+                JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
+
+            }else{
+
+                int conf = JOptionPane.showConfirmDialog(rootPane, "Realmente quiere eliminar este empleado? \n" + empleado.getNombre() + " " + empleado.getApellidos());
+
+                if(conf == JOptionPane.YES_OPTION){
+                    modelEmpl.eliminarEmpleado(jTextFieldECodigo1.getText());
+                    JOptionPane.showMessageDialog(rootPane, "Empleado eliminado exitosamente: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
+                    jTextFieldECodigo1.setText("");
+                    actVistaEmpleado();
+                }else{
+                    if(conf == JOptionPane.NO_OPTION){
+                        JOptionPane.showMessageDialog(rootPane, "Empleado no eliminado: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
+                        jTextFieldECodigo1.setText("");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonEConsultar1ActionPerformed
+
+    private void jButtonEGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            if(jTextFieldENombres.getText().equals("") || jTextFieldEApellidos.getText().equals("") || (Integer.valueOf(jTextFieldESalarios.getText()) <= 0) || (Integer.valueOf(jTextFieldEvlrHE.getText()) < 0) ){
+                JOptionPane.showMessageDialog(rootPane, "Valor del nombre, apellido y salario, son obligatorios");
+            }else{
+                String auxTransString;
+                boolean auxTransBo = jCheckBoxEAuxTransp.isSelected();
+
+                if(auxTransBo){
+                    auxTransString = "true";
+                }else{
+                    auxTransString = "false";
+                }
+
+                empleado = modelEmpl.actualizarEmpleado(jTextFieldENombres.getText(),jTextFieldEApellidos.getText(),Integer.valueOf(jTextFieldEvlrHE.getText()),auxTransString,Integer.valueOf(jTextFieldESalarios.getText()),jTextFieldECodigo.getText());
+
+                if(empleado==null){
+                    JOptionPane.showMessageDialog(rootPane, "Empleado No Guardado");
+                    jTextFieldECodigo.setText("");
+                    jTextFieldENombres.setText("");
+                    jTextFieldEvlrHE.setText("");
+                    jTextFieldEApellidos.setText("");
+                    jTextFieldESalarios.setText("");
+                    jCheckBoxEAuxTransp.setSelected(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
+                    jTextFieldECodigo.setText("");
+                    jTextFieldENombres.setText("");
+                    jTextFieldEvlrHE.setText("");
+                    jTextFieldEApellidos.setText("");
+                    jTextFieldESalarios.setText("");
+                    jCheckBoxEAuxTransp.setSelected(false);
+                    actVistaEmpleado();
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Error: Salario y Hora Extra deben ser de tipo numerico \n"+ e.getMessage());
+            jTextFieldECodigo.setText("");
+            jTextFieldENombres.setText("");
+            jTextFieldEvlrHE.setText("");
+            jTextFieldEApellidos.setText("");
+            jTextFieldESalarios.setText("");
+            jCheckBoxEAuxTransp.setSelected(false);
+        }
+    }//GEN-LAST:event_jButtonEGuardarActionPerformed
+
+    private void jTextFieldENombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldENombresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldENombresActionPerformed
+
+    private void jButtonEConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEConsultarActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo.getText());
+
+            if(empleado==null){
+                JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
+                jTextFieldECodigo.setText("");
+                jTextFieldENombres.setText("");
+                jTextFieldEApellidos.setText("");
+                jTextFieldESalarios.setText("");
+                jTextFieldEvlrHE.setText("");
+                jCheckBoxEAuxTransp.setSelected(false);
+            }else{
+
+                jTextFieldENombres.setText(empleado.getNombre());
+                jTextFieldEApellidos.setText(empleado.getApellidos());
+                jTextFieldESalarios.setText(String.valueOf(empleado.getSalario()));
+                jTextFieldEvlrHE.setText(String.valueOf(empleado.getHorasExtra()));
+                jCheckBoxEAuxTransp.setSelected(empleado.isAuxilioTransporte());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonEConsultarActionPerformed
+
+    private void jCheckBoxCATActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCATActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxCATActionPerformed
+
+    private void jTextFieldCSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCSalarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldCSalarioActionPerformed
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        // TODO add your handling code here:
+
+        try {
+
+            if(jTextFieldCNombres.getText().equals("") || jTextFieldCApellidos.getText().equals("") || (Integer.valueOf(jTextFieldCSalario.getText()) <= 0) || (Integer.valueOf(jTextFieldCvlrHE.getText()) < 0) ){
+                JOptionPane.showMessageDialog(rootPane, "Valor del nombre, apellido y salario, son obligatorios");
+            }else{
+                String auxTransString;
+                boolean auxTransBo = jCheckBoxCAT.isSelected();
+
+                if(auxTransBo){
+                    auxTransString = "true";
+                }else{
+                    auxTransString = "false";
+                }
+
+                modelEmpl.crearEmpleado(jTextFieldCNombres.getText(), jTextFieldCApellidos.getText(), Integer.valueOf(jTextFieldCvlrHE.getText()), auxTransString, Integer.valueOf(jTextFieldCSalario.getText()));
+
+                JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
+                jTextFieldCNombres.setText("");
+                jTextFieldCApellidos.setText("");
+                jTextFieldCSalario.setText("0");
+                jTextFieldCvlrHE.setText("0");
+                jCheckBoxCAT.setSelected(false);
+                actVistaEmpleado();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Error: Salario y Hora Extra deben ser de tipo numerico \n"+ e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
     private void jButtonGenerarNominaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerarNominaActionPerformed
         // TODO add your handling code here:
-        CallCenter liquidacion = new CallCenter();
+        actVistaEmpleado();
+
         ArrayList<Double> nominas = new ArrayList<>();
         ArrayList<Double> prestaciones = new ArrayList<>();
         ArrayList<Empleado> listEmpleado = new ArrayList<>();
 
-        modelEmpleado modelConsultar = new modelEmpleado();
-        Empleado empl = modelConsultar.consultaEmpleadoId(jTextFieldCodigo.getText());
-        listEmpleado.add(empl);
+        empleado = modelEmpl.consultaEmpleadoId(jTextFieldCodigo.getText());
+        if(empleado != null){
+            listEmpleado.add(empleado);
 
-        System.out.println("Liquidacion Nomina");
-        nominas = liquidacion.liquidarNominaEmp(listEmpleado);
-        for (int i = 0; i < nominas.size(); i++) {
-            System.out.println("Nombre: "+ listEmpleado.get(i).getNombre() +" Total a pagar: " + Math.round(nominas.get(i)));
-            jTextFieldTotalNomina.setText(String.valueOf(Math.round(nominas.get(i))));
-        }
-        System.out.println("Prestaciones Sociales");
-        prestaciones = liquidacion.liquidarPrestacionesEmp(listEmpleado);
-        for (int i = 0; i < prestaciones.size(); i++) {
-            System.out.println("Nombre: "+ listEmpleado.get(i).getNombre() +" Total a pagar: " + Math.round(prestaciones.get(i)));
-            jTextFieldTotalPrestaciones.setText(String.valueOf(Math.round(prestaciones.get(i))));
-        }
+            nominas = callCenter.liquidarNominaEmp(listEmpleado);
+            jTextFieldTotalNomina.setText(String.valueOf(Math.round(nominas.get(0))));
 
+            prestaciones = callCenter.liquidarPrestacionesEmp(listEmpleado);
+            jTextFieldTotalPrestaciones.setText(String.valueOf(Math.round(prestaciones.get(0))));
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Error: en el proceso intente de nuevo");
+        }
     }//GEN-LAST:event_jButtonGenerarNominaActionPerformed
 
     private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
@@ -967,202 +1133,30 @@ public class frmPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
         }
-
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 
-    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        // TODO add your handling code here:
-        
-        try {
-            
-            if(jTextFieldCNombres.getText().equals("") || jTextFieldCApellidos.getText().equals("") || (Integer.valueOf(jTextFieldCSalario.getText()) <= 0) || (Integer.valueOf(jTextFieldCvlrHE.getText()) < 0) ){
-                JOptionPane.showMessageDialog(rootPane, "Valor del nombre, apellido y salario, son obligatorios");
-            }else{
-                String auxTransString;
-                boolean auxTransBo = jCheckBoxCAT.isSelected();
-
-                if(auxTransBo){
-                    auxTransString = "true";
-                }else{
-                    auxTransString = "false";
-                }
-
-                modelEmpl.crearEmpleado(jTextFieldCNombres.getText(), jTextFieldCApellidos.getText(), Integer.valueOf(jTextFieldCvlrHE.getText()), auxTransString, Integer.valueOf(jTextFieldCSalario.getText()));
-
-                JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
-                jTextFieldCNombres.setText("");
-                jTextFieldCApellidos.setText("");
-                jTextFieldCSalario.setText("0");
-                jTextFieldCvlrHE.setText("0");
-                jCheckBoxCAT.setSelected(false);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Error: Salario y Hora Extra deben ser de tipo numerico \n"+ e.getMessage());
-        }
-                
-    }//GEN-LAST:event_jButtonGuardarActionPerformed
-
-    private void jCheckBoxCATActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCATActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxCATActionPerformed
-
-    private void jTextFieldENombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldENombresActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldENombresActionPerformed
-
-    private void jButtonEGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEGuardarActionPerformed
-        // TODO add your handling code here:
-        try {
-            
-            if(jTextFieldENombres.getText().equals("") || jTextFieldEApellidos.getText().equals("") || (Integer.valueOf(jTextFieldESalarios.getText()) <= 0) || (Integer.valueOf(jTextFieldEvlrHE.getText()) < 0) ){
-                JOptionPane.showMessageDialog(rootPane, "Valor del nombre, apellido y salario, son obligatorios");
-            }else{
-               String auxTransString;
-                boolean auxTransBo = jCheckBoxEAuxTransp.isSelected();
-
-                if(auxTransBo){
-                    auxTransString = "true";
-                }else{
-                    auxTransString = "false";
-                }
-
-                empleado = modelEmpl.actualizarEmpleado(jTextFieldENombres.getText(),jTextFieldEApellidos.getText(),Integer.valueOf(jTextFieldEvlrHE.getText()),auxTransString,Integer.valueOf(jTextFieldESalarios.getText()),jTextFieldECodigo.getText());
-
-                if(empleado==null){
-                    JOptionPane.showMessageDialog(rootPane, "Empleado No Guardado");
-                    jTextFieldECodigo.setText("");
-                    jTextFieldENombres.setText("");
-                    jTextFieldEvlrHE.setText("");
-                    jTextFieldEApellidos.setText("");
-                    jTextFieldESalarios.setText("");
-                    jCheckBoxEAuxTransp.setSelected(false);
-                }else{
-                    JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
-                    jTextFieldECodigo.setText("");
-                    jTextFieldENombres.setText("");
-                    jTextFieldEvlrHE.setText("");
-                    jTextFieldEApellidos.setText("");
-                    jTextFieldESalarios.setText("");
-                    jCheckBoxEAuxTransp.setSelected(false); 
-                }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Error: Salario y Hora Extra deben ser de tipo numerico \n"+ e.getMessage());
-            jTextFieldECodigo.setText("");
-            jTextFieldENombres.setText("");
-            jTextFieldEvlrHE.setText("");
-            jTextFieldEApellidos.setText("");
-            jTextFieldESalarios.setText("");
-            jCheckBoxEAuxTransp.setSelected(false);
-        }
-        
-    }//GEN-LAST:event_jButtonEGuardarActionPerformed
-
-    private void jButtonEConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEConsultarActionPerformed
-        // TODO add your handling code here:
-        try {
-
-            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo.getText());
-
-            if(empleado==null){
-                JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
-                jTextFieldECodigo.setText("");
-                jTextFieldENombres.setText("");
-                jTextFieldEApellidos.setText("");
-                jTextFieldESalarios.setText("");
-                jTextFieldEvlrHE.setText("");
-                jCheckBoxEAuxTransp.setSelected(false);
-            }else{
-
-                jTextFieldENombres.setText(empleado.getNombre());
-                jTextFieldEApellidos.setText(empleado.getApellidos());
-                jTextFieldESalarios.setText(String.valueOf(empleado.getSalario()));
-                jTextFieldEvlrHE.setText(String.valueOf(empleado.getHorasExtra()));
-                jCheckBoxEAuxTransp.setSelected(empleado.isAuxilioTransporte());
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
-        }
-    }//GEN-LAST:event_jButtonEConsultarActionPerformed
-
-    private void jButtonEConsultar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEConsultar1ActionPerformed
-        // TODO add your handling code here:
-        
-        try {
-
-            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo1.getText());
-
-            if(empleado==null){
-                
-                JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
-
-            }else{
-
-                
-                int conf = JOptionPane.showConfirmDialog(rootPane, "Realmente quiere eliminar este empleado? \n" + empleado.getNombre() + " " + empleado.getApellidos());
-                
-                if(conf == JOptionPane.YES_OPTION){
-                    modelEmpl.eliminarEmpleado(jTextFieldECodigo1.getText());
-                    JOptionPane.showMessageDialog(rootPane, "Empleado eliminado exitosamente: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
-                    jTextFieldECodigo1.setText("");
-                }else{
-                    if(conf == JOptionPane.NO_OPTION){
-                        JOptionPane.showMessageDialog(rootPane, "Empleado no eliminado: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
-                        jTextFieldECodigo1.setText("");
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Error: "+ e.getMessage());
-        }
-        
-        
-    }//GEN-LAST:event_jButtonEConsultar1ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButtonProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarActionPerformed
-        // TODO add your handling code here:
-        
-        LinkedList<Empleado> empleados = modelEmpl.ListaEmpleado();
-        ArrayList<ArrayList> procesos = new ArrayList<>();
-       
-        procesos = callCenter.procesoMasivoNomina(empleados);
-        
-        listaNominasPrestaciones(procesos);       
-        
-    }//GEN-LAST:event_jButtonProcesarActionPerformed
-
-    private void jTextFieldCSalarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCSalarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldCSalarioActionPerformed
-    
-    private void listaNominasPrestaciones(ArrayList procesos){
+    private void listaNominasPrestaciones(HashMap<Integer, ArrayList> listaNomina){
 
         DefaultListModel model = new DefaultListModel();
         int index = 0;
-     
-        model.add(index, "      ID - NOMBRE - NOMINA - PRESTACIONES");
-        
-        for (int i = 0; i < procesos.size(); i++) {
-            index++;            
-            String data = "ID: " + procesos.get(i);
+        for (ArrayList i : listaNomina.values()) {
+            
+            String data = "Id: " + i.get(0) + " NOMBRE: " +  i.get(1) + " NOMINA: " +  i.get(2) + " PRESTACIONES: "+ i.get(3);
+                                  
             model.add(index, data);
+            index++;  
         }
-        jListNominasMasivas.setModel(model);        
+        
+        jListNominasMasivas.setModel(model);
+        
     }
-    
     
     private void listaEmpleado(){
         
         DefaultListModel model = new DefaultListModel();
         int index = 0;
         for (Empleado empleado : empObjectList) {
-            String data =  (index+1) + " ) " +  empleado.getNombre() + " - " + empleado.getApellidos() + 
+            String data =  (index+1) + " ) Id: " + empleado.getId() + " - "  +  empleado.getNombre() + " - " + empleado.getApellidos() + 
                                        "\n Horas Extras: " + empleado.getHorasExtra() + 
                                        "\n Valor Salario: " + empleado.getSalario() + 
                                        "\n Auxilio Transporte \n" + empleado.isAuxilioTransporte();
@@ -1173,7 +1167,10 @@ public class frmPrincipal extends javax.swing.JFrame {
         jListEmpleado.setModel(model);
     }
     
-    
+    private void actVistaEmpleado(){
+        this.empObjectList = modelEmpl.ListaEmpleado();
+        this.listaEmpleado();
+    }
     
     
     /**

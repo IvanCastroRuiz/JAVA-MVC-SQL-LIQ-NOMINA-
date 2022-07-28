@@ -1,10 +1,9 @@
 package modelo;
 import java.sql.*;
 
-import clases.Empleado;
-import java.awt.Component;
+import controlador.Empleado;
 import java.util.LinkedList;
-import javax.swing.JOptionPane;
+
 
 public class modelEmpleado extends DbData {
     
@@ -18,13 +17,12 @@ public class modelEmpleado extends DbData {
         System.out.println("");
     }
     
-    
     public Empleado consultaEmpleadoId(String id){
         Empleado emp = null;
         
         try (Connection connection = DriverManager.getConnection(getUrl(), getUser(), getPassword())) {
             
-            String query = "SELECT * FROM `tb_empleado` WHERE id = ?";
+            String query = "SELECT * FROM `tb_empleado` WHERE id = ? ORDER BY id";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, id);
             ResultSet resul = stmt.executeQuery();
@@ -138,7 +136,7 @@ public class modelEmpleado extends DbData {
         
         try (Connection connection = DriverManager.getConnection(getUrl(), getUser(), getPassword())) {
             
-            String query = "SELECT `id`, `nombre`, `apellido`, `horas_extra`, `aux_transp`, `salario` FROM `tb_empleado`";
+            String query = "SELECT `id`, `nombre`, `apellido`, `horas_extra`, `aux_transp`, `salario` FROM `tb_empleado` ORDER BY id";
             Statement stmt = connection.createStatement();
             ResultSet resul = stmt.executeQuery(query);
             while(resul.next()){

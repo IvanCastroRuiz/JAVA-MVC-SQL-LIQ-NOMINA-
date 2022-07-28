@@ -1,4 +1,4 @@
-package clases;
+package controlador;
 
 public class Empleado {
     // Atributos

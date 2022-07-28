@@ -1,13 +1,8 @@
-package clases;
+package controlador;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class CallCenter {
     // Atributos
@@ -144,10 +139,12 @@ public class CallCenter {
         
         return prestacion;
     }
-    
-    public ArrayList<ArrayList> procesoMasivoNomina(LinkedList<Empleado> empleados){
+       
+    public HashMap<Integer, ArrayList> procesoMasivoNomina(LinkedList<Empleado> empleados){
         ArrayList<ArrayList> liqNominasPrestaciones = new ArrayList<>();
-   
+        
+        HashMap<Integer, ArrayList> listaNomina = new HashMap<Integer, ArrayList>();
+          
         if(empleados != null){
             for (Empleado empleado : empleados) {
                 //HashMap<String, ArrayList> liqEmpleado = new HashMap<String, ArrayList>();
@@ -166,14 +163,15 @@ public class CallCenter {
                 liqEmpleado.add(nombreCompleto);
                 liqEmpleado.add(Math.round(nomina.get(0)));
                 liqEmpleado.add(Math.round(prestacion.get(0)));
-
+                    
+                listaNomina.put(id, liqEmpleado); 
                 liqNominasPrestaciones.add(liqEmpleado);          
             }
         }else{
             return null;
         }        
-        return liqNominasPrestaciones;
-    };
+        return listaNomina;
+    }
     
     
 }
