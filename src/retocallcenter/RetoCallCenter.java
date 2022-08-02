@@ -1,9 +1,9 @@
 package retocallcenter;
 
-import controlador.Empleado;
+import modelo.Empleado;
 import controlador.CallCenter;
 import java.util.ArrayList;
-import modelo.modelEmpleado;
+import controlador.EmpleadoDAO;
 
 public class RetoCallCenter {
 
@@ -28,7 +28,7 @@ public class RetoCallCenter {
         Empleado empleado3 = new Empleado(3,"Laura", "Ortiz",50000, false, 2000000);
         listEmpleado.add(empleado3);
         
-        modelEmpleado empleado4 = new modelEmpleado();
+        EmpleadoDAO empleado4 = new EmpleadoDAO();
         if(empleado4.consultaEmpleadoId("5") != null){
             listEmpleado.add(empleado4.consultaEmpleadoId("5"));
         }                

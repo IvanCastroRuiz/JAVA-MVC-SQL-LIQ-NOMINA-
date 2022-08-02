@@ -5,25 +5,25 @@
 package vista;
 
 import controlador.CallCenter;
-import controlador.Empleado;
+import modelo.Empleado;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import modelo.modelEmpleado;
+import controlador.EmpleadoDAO;
 
 public class frmPrincipal extends javax.swing.JFrame {
     
     LinkedList<Empleado> empObjectList = new LinkedList<>();
-    modelEmpleado modelEmpl = new modelEmpleado();
+    EmpleadoDAO EmpleadoDAO = new EmpleadoDAO();
     CallCenter callCenter = new CallCenter();
     Empleado empleado;
     
 
     public frmPrincipal() {
         initComponents();
-        this.empObjectList = modelEmpl.ListaEmpleado();
+        this.empObjectList = EmpleadoDAO.ListaEmpleado();
         this.listaEmpleado();
     }
 
@@ -906,7 +906,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void jButtonProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarActionPerformed
         // TODO add your handling code here:
 
-        LinkedList<Empleado> empleados = modelEmpl.ListaEmpleado();
+        LinkedList<Empleado> empleados = EmpleadoDAO.ListaEmpleado();
         HashMap<Integer, ArrayList> listaNomina = new HashMap<Integer, ArrayList>();
 
         listaNomina = callCenter.procesoMasivoNomina(empleados);
@@ -928,7 +928,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         try {
 
-            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo1.getText());
+            empleado = EmpleadoDAO.consultaEmpleadoId(jTextFieldECodigo1.getText());
 
             if(empleado==null){
 
@@ -939,7 +939,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 int conf = JOptionPane.showConfirmDialog(rootPane, "Realmente quiere eliminar este empleado? \n" + empleado.getNombre() + " " + empleado.getApellidos());
 
                 if(conf == JOptionPane.YES_OPTION){
-                    modelEmpl.eliminarEmpleado(jTextFieldECodigo1.getText());
+                    EmpleadoDAO.eliminarEmpleado(jTextFieldECodigo1.getText());
                     JOptionPane.showMessageDialog(rootPane, "Empleado eliminado exitosamente: \n"+ empleado.getNombre() + " " + empleado.getApellidos());
                     jTextFieldECodigo1.setText("");
                     actVistaEmpleado();
@@ -972,7 +972,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                     auxTransString = "false";
                 }
 
-                empleado = modelEmpl.actualizarEmpleado(jTextFieldENombres.getText(),jTextFieldEApellidos.getText(),Integer.valueOf(jTextFieldEvlrHE.getText()),auxTransString,Integer.valueOf(jTextFieldESalarios.getText()),jTextFieldECodigo.getText());
+                empleado = EmpleadoDAO.actualizarEmpleado(jTextFieldENombres.getText(),jTextFieldEApellidos.getText(),Integer.valueOf(jTextFieldEvlrHE.getText()),auxTransString,Integer.valueOf(jTextFieldESalarios.getText()),jTextFieldECodigo.getText());
 
                 if(empleado==null){
                     JOptionPane.showMessageDialog(rootPane, "Empleado No Guardado");
@@ -1012,7 +1012,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
 
-            empleado = modelEmpl.consultaEmpleadoId(jTextFieldECodigo.getText());
+            empleado = EmpleadoDAO.consultaEmpleadoId(jTextFieldECodigo.getText());
 
             if(empleado==null){
                 JOptionPane.showMessageDialog(rootPane, "No existe el empleado");
@@ -1061,7 +1061,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                     auxTransString = "false";
                 }
 
-                modelEmpl.crearEmpleado(jTextFieldCNombres.getText(), jTextFieldCApellidos.getText(), Integer.valueOf(jTextFieldCvlrHE.getText()), auxTransString, Integer.valueOf(jTextFieldCSalario.getText()));
+                EmpleadoDAO.crearEmpleado(jTextFieldCNombres.getText(), jTextFieldCApellidos.getText(), Integer.valueOf(jTextFieldCvlrHE.getText()), auxTransString, Integer.valueOf(jTextFieldCSalario.getText()));
 
                 JOptionPane.showMessageDialog(rootPane, "Empleado Guardado Exitosamente");
                 jTextFieldCNombres.setText("");
@@ -1084,7 +1084,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         ArrayList<Double> prestaciones = new ArrayList<>();
         ArrayList<Empleado> listEmpleado = new ArrayList<>();
 
-        empleado = modelEmpl.consultaEmpleadoId(jTextFieldCodigo.getText());
+        empleado = EmpleadoDAO.consultaEmpleadoId(jTextFieldCodigo.getText());
         if(empleado != null){
             listEmpleado.add(empleado);
 
@@ -1103,7 +1103,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         try {
 
-            modelEmpleado modelConsultar = new modelEmpleado();
+            EmpleadoDAO modelConsultar = new EmpleadoDAO();
             Empleado empl = modelConsultar.consultaEmpleadoId(jTextFieldCodigo.getText());
 
             if(empl==null){
@@ -1168,7 +1168,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     }
     
     private void actVistaEmpleado(){
-        this.empObjectList = modelEmpl.ListaEmpleado();
+        this.empObjectList = EmpleadoDAO.ListaEmpleado();
         this.listaEmpleado();
     }
     

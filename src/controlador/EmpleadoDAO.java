@@ -1,11 +1,12 @@
-package modelo;
+package controlador;
 import java.sql.*;
 
-import controlador.Empleado;
 import java.util.LinkedList;
+import modelo.DbData;
+import modelo.Empleado;
 
 
-public class modelEmpleado extends DbData {
+public class EmpleadoDAO extends DbData {
     
     public void mostrarDatos(int empId, String nombre, String apellido, int vlrHoraExtra, String auxTransp, int salarioEmpl){
         System.out.println("ID empleado: " + empId + 

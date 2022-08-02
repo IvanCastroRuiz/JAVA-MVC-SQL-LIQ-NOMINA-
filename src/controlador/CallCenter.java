@@ -1,5 +1,6 @@
 package controlador;
 
+import modelo.Empleado;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -141,12 +142,9 @@ public class CallCenter {
     }
        
     public HashMap<Integer, ArrayList> procesoMasivoNomina(LinkedList<Empleado> empleados){
-       
         HashMap<Integer, ArrayList> listaNomina = new HashMap<Integer, ArrayList>();
-          
         if(empleados != null){
             for (Empleado empleado : empleados) {
-                //HashMap<String, ArrayList> liqEmpleado = new HashMap<String, ArrayList>();
                 
                 ArrayList liqEmpleado = new ArrayList<>();
 
@@ -171,6 +169,4 @@ public class CallCenter {
         }        
         return listaNomina;
     }
-    
-    
 }
